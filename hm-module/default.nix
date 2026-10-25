@@ -21,14 +21,10 @@
     sources = builtins.fromJSON (builtins.readFile "${self}/sources.json");
   in {
     manager = pkgs.fetchFromGitHub {
-      inherit (sources.addons.sine.manager) rev hash;
-      repo = "Sine";
-      owner = "CosmoCreeper";
+      inherit (sources.addons.sine.manager) owner repo rev hash;
     };
     bootloader = pkgs.fetchFromGitHub {
-      inherit (sources.addons.sine.bootloader) rev hash;
-      repo = "bootloader";
-      owner = "sineorg";
+      inherit (sources.addons.sine.bootloader) owner repo rev hash;
     };
   };
 
@@ -47,10 +43,7 @@ in {
       wrappedPackageName = "zen-${name}";
       unwrappedPackageName = "zen-${name}-unwrapped";
       platforms = {
-        linux = {
-          vendorPath = linuxConfigPath;
-          configPath = linuxConfigPath;
-        };
+        linux.configPath = linuxConfigPath;
         darwin = {
           configPath = darwinConfigPath;
           defaultsId = "app.zen-browser.zen";
@@ -191,7 +184,6 @@ in {
             Set darwin.packageMode = "wrapped" to enable it, at the cost of the upstream signature.
           '';
         }) {
-          "programs.zen-browser.enableGnomeExtensions" = cfg.enableGnomeExtensions;
           "programs.zen-browser.extraPrefs" = cfg.extraPrefs != "";
           "programs.zen-browser.extraPrefsFiles" = cfg.extraPrefsFiles != [];
           "programs.zen-browser.pkcs11Modules" = cfg.pkcs11Modules != [];
